@@ -39,7 +39,7 @@ export default function ContactPage() {
           </div>
           <div className="text-center text-muted-foreground">
             <p className="font-semibold">Business Hours:</p>
-            <p>Open Every Day: 9:00 AM - 9:00 PM</p>
+            <p>Open Every Day: 8:00 AM - 7:00 PM</p>
           </div>
         </CardContent>
       </Card>
