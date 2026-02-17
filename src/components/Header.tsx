@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -10,11 +11,11 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui
 import ShareButton from './ShareButton';
 
 const navItems = [
-  { type: 'link', href: '/', label: 'Home' },
-  { type: 'link', href: '/order', label: 'Place Order' },
-  { type: 'link', href: '/admin/login', label: 'Admin Login' },
-  { type: 'share', label: 'Share App' },
-  { type: 'link', href: '/contact', label: 'Contact Us' },
+  { id: 'home', type: 'link', href: '/', label: 'Home' },
+  { id: 'order', type: 'link', href: '/order', label: 'Place Order' },
+  { id: 'admin', type: 'link', href: '/admin/login', label: 'Admin Login' },
+  { id: 'share', type: 'share', label: 'Share App' },
+  { id: 'contact', type: 'link', href: '/contact', label: 'Contact Us' },
 ];
 
 export default function Header() {
@@ -26,7 +27,7 @@ export default function Header() {
       {navItems.map((item) => {
         if (item.type === 'link') {
           return (
-            <Button asChild variant="ghost" onClick={() => setMenuOpen(false)} key={item.href}>
+            <Button asChild variant="ghost" onClick={() => setMenuOpen(false)} key={item.id}>
               <Link href={item.href!}>
                 {item.label}
               </Link>
@@ -34,7 +35,7 @@ export default function Header() {
           );
         }
         if (item.type === 'share') {
-          return <ShareButton variant="ghost" onClick={() => setMenuOpen(false)} key={item.label} />;
+          return <ShareButton variant="ghost" onClick={() => setMenuOpen(false)} key={item.id} />;
         }
         return null;
       })}
