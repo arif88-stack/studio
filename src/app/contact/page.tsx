@@ -5,9 +5,9 @@ import Link from 'next/link';
 import WhatsappIcon from "@/components/icons/WhatsappIcon";
 
 export default function ContactPage() {
-  const phoneNumber = "+919678457111"; // Replace with actual phone number
-  const whatsappNumber = "919678457111"; // Replace with actual number without '+' or spaces
-  const email = "contact@weldorder.com"; // Replace with actual email
+  const phoneNumber = "+919678457111";
+  const whatsappNumber = "919678457111";
+  const email = "rajjabalihh86@gmail.com";
 
   return (
     <main className="container mx-auto max-w-2xl py-8 px-4 animate-fade-in">
