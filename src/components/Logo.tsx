@@ -3,12 +3,12 @@ import Image from 'next/image';
 import type { HTMLAttributes } from 'react';
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 
-const logoImage = PlaceHolderImages.find(img => img.id === 'gallery-welding');
-// Use the URL from the JSON file, with a safe fallback.
+// Use the first image in the placeholder list as the logo.
+const logoImage = PlaceHolderImages[0]; 
 const logoUrl = logoImage?.imageUrl ?? '';
 
 /**
- * Renders the Rajjab Welds logo using a high-quality welder image.
+ * Renders the Rajjab Welds logo using a simple image.
  * Uses Next.js Image for optimization and is styled as a circle.
  */
 export default function Logo(props: HTMLAttributes<HTMLDivElement>) {
@@ -23,7 +23,6 @@ export default function Logo(props: HTMLAttributes<HTMLDivElement>) {
           priority
         />
       ) : (
-        // Fallback in case the image URL can't be found for some reason.
         <div className="w-full h-full bg-gray-300" />
       )}
     </div>

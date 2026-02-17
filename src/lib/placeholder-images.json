@@ -1,28 +1,10 @@
 {
   "placeholderImages": [
     {
-      "id": "gallery-gate",
-      "description": "An ornate, custom-designed metal gate.",
-      "imageUrl": "https://images.unsplash.com/photo-1599131510365-86cb6824c83a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvcm5hdGUlMjBtZXRhbCUyMGdhdGV8ZW58MHx8fHwxNzA5ODExNTM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "ornate gate"
-    },
-    {
-      "id": "gallery-railing",
-      "description": "A modern, sturdy metal staircase railing.",
-      "imageUrl": "https://images.unsplash.com/photo-1541696448399-6881d773d42f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMHJhaWxpbmd8ZW58MHx8fHwxNzA5ODExNjUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "staircase railing"
-    },
-    {
-      "id": "gallery-shutter",
-      "description": "A secure, heavy-duty metal roll-up shutter.",
-      "imageUrl": "https://images.unsplash.com/photo-1590962534522-de1a418b769f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMHJvbGwlMjB1cCUyMHNodXR0ZXJ8ZW58MHx8fHwxNzA5ODExNzYyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "metal shutter"
-    },
-    {
-      "id": "gallery-welding",
-      "description": "A welder's mask, representing the Rajjab Welds logo.",
-      "imageUrl": "https://images.unsplash.com/photo-1533013239385-c40590a16b48?q=80&w=1080&auto=format&fit=crop",
-      "imageHint": "welding mask"
+      "id": "simple-welding-image",
+      "description": "A simple, clean image of welding sparks.",
+      "imageUrl": "https://images.unsplash.com/photo-1612261309533-b723615391a6?q=80&w=1080&auto=format&fit=crop",
+      "imageHint": "welding sparks"
     }
   ]
 }
