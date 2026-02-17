@@ -1,5 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Logo from '@/components/Logo';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -15,9 +17,14 @@ export default function Home() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="mb-8">
+          <p className="mb-6">
             We specialize in gates, grills, railings, and other custom metal work.
           </p>
+          <Link href="/order" passHref>
+            <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+              Place an Order
+            </Button>
+          </Link>
         </CardContent>
       </Card>
     </main>
