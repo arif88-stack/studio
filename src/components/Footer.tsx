@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 export default function Footer() {
-    const [year, setYear] = useState(new Date().getFullYear());
+    const [year, setYear] = useState<number | null>(null);
 
     useEffect(() => {
         // This ensures the year is only set on the client-side after hydration,
