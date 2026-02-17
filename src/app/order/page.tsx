@@ -2,8 +2,8 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useFormStatus } from 'react-dom';
+import { useEffect, useRef, useState, useActionState } from 'react';
 
 import { OrderSchema, type OrderFormValues, type OrderFormState } from '@/lib/definitions';
 import { createOrder } from '@/app/order/actions';
@@ -29,7 +29,7 @@ function SubmitButton() {
 const initialState: OrderFormState = undefined;
 
 export default function OrderPage() {
-  const [formState, formAction] = useFormState(createOrder, initialState);
+  const [formState, formAction] = useActionState(createOrder, initialState);
   const { toast } = useToast();
   const [imagePreviews, setImagePreviews] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
