@@ -15,7 +15,6 @@ const navLinks = [
   { href: '/order', label: 'Place Order' },
   { href: '/contact', label: 'Contact Us' },
   { href: '/admin/login', label: 'Admin Login' },
-  { href: '/gallery', label: 'Our Work' },
 ];
 
 export default function Header() {
