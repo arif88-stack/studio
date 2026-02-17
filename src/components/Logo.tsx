@@ -1,8 +1,11 @@
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
 import type { HTMLAttributes } from 'react';
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
-const logoUrl = 'https://images.unsplash.com/photo-1533013239385-c40590a16b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3ZWxkaW5nJTIwbWFza3xlbnwwfHx8fDE3MDk4MTE4MzF8MA&ixlib=rb-4.1.0&q=80&w=1080';
+const logoImage = PlaceHolderImages.find(img => img.id === 'gallery-welding');
+// Use the URL from the JSON file, with a safe fallback.
+const logoUrl = logoImage?.imageUrl ?? '';
 
 /**
  * Renders the Rajjab Welds logo using a high-quality welder image.
@@ -11,13 +14,18 @@ const logoUrl = 'https://images.unsplash.com/photo-1533013239385-c40590a16b48?cr
 export default function Logo(props: HTMLAttributes<HTMLDivElement>) {
   return (
     <div {...props} className={cn("relative overflow-hidden rounded-full bg-muted", props.className)}>
-      <Image
-        src={logoUrl}
-        alt="Rajjab Welds Logo"
-        fill
-        style={{ objectFit: 'cover' }}
-        priority
-      />
+      {logoUrl ? (
+        <Image
+          src={logoUrl}
+          alt="Rajjab Welds Logo"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+      ) : (
+        // Fallback in case the image URL can't be found for some reason.
+        <div className="w-full h-full bg-gray-300" />
+      )}
     </div>
   );
 }
