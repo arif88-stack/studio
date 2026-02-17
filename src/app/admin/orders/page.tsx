@@ -97,6 +97,7 @@ export default function AdminOrdersPage() {
                 <TableRow>
                   <TableHead>Customer</TableHead>
                   <TableHead>Work Type</TableHead>
+                  <TableHead>Dimensions</TableHead>
                   <TableHead>Submitted</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
@@ -108,8 +109,12 @@ export default function AdminOrdersPage() {
                     <TableCell>
                       <div className="font-medium">{order.name}</div>
                       <div className="text-sm text-muted-foreground">{order.phone}</div>
+                      <div className="text-sm text-muted-foreground max-w-xs truncate">{order.address}</div>
                     </TableCell>
                     <TableCell>{order.weldingWorkType}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      {`${order.length} x ${order.width} x ${order.height} ft`}
+                    </TableCell>
                     <TableCell>
                       {order.submissionDateTime ? format(new Date(order.submissionDateTime.seconds * 1000), 'PPP') : 'N/A'}
                     </TableCell>
