@@ -1,0 +1,186 @@
+{
+  "entities": {
+    "Customer": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Customer",
+      "type": "object",
+      "description": "Represents a customer who places a welding order. Contains contact and address details provided with an order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Customer entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the customer placing the order."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Customer's contact phone number."
+        },
+        "address": {
+          "type": "string",
+          "description": "Full physical address of the customer for service or delivery."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "phoneNumber",
+        "address"
+      ]
+    },
+    "Order": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Order",
+      "type": "object",
+      "description": "Represents a welding order placed by a customer, including details about the requested work and its status.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Order entity."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to the Customer who placed this order. (Relationship: Customer 1:N Order)"
+        },
+        "weldingWorkType": {
+          "type": "string",
+          "description": "The specific type of welding work requested by the customer (e.g., gate, grill, railing, shutter repair, home work)."
+        },
+        "length": {
+          "type": "number",
+          "description": "Length dimension of the welding work in a suitable unit."
+        },
+        "width": {
+          "type": "number",
+          "description": "Width dimension of the welding work in a suitable unit."
+        },
+        "height": {
+          "type": "number",
+          "description": "Height dimension of the welding work in a suitable unit."
+        },
+        "submissionDateTime": {
+          "type": "string",
+          "description": "Timestamp indicating when the order was submitted by the customer.",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the welding order (e.g., Pending, Received, Processing, Completed, Cancelled)."
+        },
+        "photoIds": {
+          "type": "array",
+          "description": "References to the Photo entities associated with this order. An order requires exactly two photos. (Relationship: Order 1:N Photo)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "customerId",
+        "weldingWorkType",
+        "length",
+        "width",
+        "height",
+        "submissionDateTime",
+        "status",
+        "photoIds"
+      ]
+    },
+    "Photo": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Photo",
+      "type": "object",
+      "description": "Represents an uploaded photo related to a welding order, such as design references or existing work.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Photo entity."
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Reference to the Order this photo belongs to. (Relationship: Order 1:N Photo)"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL to the stored image file in a cloud storage or similar service.",
+          "format": "uri"
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the photo, e.g., 'Design Photo', 'Reference Photo 1'."
+        }
+      },
+      "required": [
+        "id",
+        "orderId",
+        "url"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores details of welding orders placed by customers. Each document includes denormalized customer contact details (name, phone, address) and the `ownerUid` (from `request.auth.uid` for anonymous users) of the user who placed the order, for auditability and authorization independence.",
+          "params": [
+            {
+              "name": "orderId",
+              "description": "The unique identifier for a specific welding order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/orders/{orderId}/photos/{photoId}",
+        "definition": {
+          "entityName": "Photo",
+          "schema": {
+            "$ref": "#/backend/entities/Photo"
+          },
+          "description": "Stores photos associated with a specific welding order. Includes denormalized `orderId` for authorization independence and explicit linkage to its parent order.",
+          "params": [
+            {
+              "name": "orderId",
+              "description": "The unique identifier of the parent welding order."
+            },
+            {
+              "name": "photoId",
+              "description": "The unique identifier for a specific photo within an order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/app_roles/admin_users/{adminId}",
+        "definition": {
+          "entityName": "AppRole",
+          "schema": {
+            "$ref": "#/backend/entities/AppRole"
+          },
+          "description": "Identifies users who have administrative privileges within the app. Used for database authorization checks based on 'existence over content'. A document's presence signifies the user is an admin.",
+          "params": [
+            {
+              "name": "adminId",
+              "description": "The unique user ID (UID) of an administrator."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to be secure, scalable, and debuggable by strictly adhering to the core design principles and mandates. Central to this design is the use of anonymous authentication for customers placing orders and role-based access control for shop administrators.\n\n**Authorization Independence via Denormalization:**\n1.  **Customer Data Embedding:** The `Customer` entity's critical fields (name, phoneNumber, address) are directly embedded into the `Order` document itself. This eliminates the need for `get()` operations in security rules to retrieve customer details when validating or accessing an order. Consequently, `Order` documents are self-contained, simplifying atomic operations (transactions/batches) and making authorization logic straightforward as all necessary customer information is present within the document.\n2.  **`ownerUid` in `Order`:** Each `Order` document includes an `ownerUid` field, which explicitly stores the `request.auth.uid` of the anonymous user who placed the order. This denormalized ownership information directly within the document ensures that any access decision related to the original placer can be made without additional lookups.\n3.  **`orderId` in `Photo`:** The `Photo` documents, stored in a subcollection under `Order`, also include an explicit `orderId` field. While the path already provides this context, its presence in the document reinforces authorization independence, allowing for direct validation if a photo were ever moved or referenced outside its immediate hierarchical context, and simplifying security rules by ensuring all necessary context is within the `resource.data` object.\n\n**QAPs (Rules are not Filters) and Structural Segregation:**\n1.  **Dedicated Admin Role Collection:** Administrative users (shop personnel) are identified through a dedicated top-level collection: `/app_roles/admin_users/{adminId}`. This collection uses the 'existence over content' pattern, where a document for a `uid` simply existing signifies an admin role. This segregation ensures that the `list` operation on the `/orders` collection can be securely performed by administrators without filtering. Security rules can efficiently check `exists(/databases/$(database)/documents/app_roles/admin_users/$(request.auth.uid))` allowing authorized users to retrieve all orders without requiring client-side filtering or inefficient rule evaluation across all documents.\n2.  **Homogeneous Security Posture:**\n    *   The `/orders` collection maintains a consistent security posture: any authenticated anonymous user can `create` an order (with their `ownerUid`), and only authenticated `admin` users can `read`, `update`, or `delete` orders. This clear distinction simplifies rules and ensures `list` operations for admins return only authorized data.\n    *   Similarly, the `/orders/{orderId}/photos` subcollection's security is tied to its parent order, ensuring a consistent access pattern for photo creation (tied to order placement or admin actions) and admin-only read/update/delete access. This structural segregation supports efficient and secure `list` queries for photos within a specific order by an authorized administrator.\n\nThis design prioritizes clarity, security, and performance by embedding crucial authorization context, leveraging hierarchical paths for related data, and segregating different security postures into distinct collections or subcollections."
+  }
+}

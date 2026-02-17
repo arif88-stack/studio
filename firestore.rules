@@ -1,0 +1,129 @@
+/**
+ * @file firestore.rules
+ * @description Firestore Security Rules for the Welding Order Management App.
+ *
+ * Core Philosophy:
+ * This ruleset implements a dual-access security model. It allows any authenticated user,
+ * including anonymous ones, to submit new welding orders into the system. Once submitted,
+ * these orders become read-only for the original creator. A separate, privileged group of
+ * administrative users (e.g., shop staff) is granted full Create, Read, Update, and
+ * Delete (CRUD) permissions over all order and photo data for management and processing.
+ *
+ * Data Structure:
+ * The data is organized around a top-level `/orders` collection. Each order document
+ * contains all necessary information, including denormalized customer details, to make it
+ * self-contained for authorization. Photos related to an order are stored in a `/photos`
+ * subcollection. Administrator privileges are defined by the existence of a user's UID
+ * in the `/app_roles/admin_users` collection, which is managed by a trusted backend process.
+ *
+ * Key Security Decisions:
+ * - Anonymous Creation: Anonymous users are trusted to create new orders and associated photos.
+ *   This is a "write-once" model; they cannot read, update, or delete their submissions.
+ * - Admin-Only Management: All management tasks (reading, listing, updating, deleting orders
+ *   and photos) are strictly reserved for users identified as administrators.
+ * - No Client-Side Role Management: The `/app_roles` collection is completely locked down from
+ *   all client access to prevent any possibility of privilege escalation.
+ * - Public Listing is Disallowed: Listing orders is a privileged operation reserved for admins.
+ *
+ * Denormalization for Authorization:
+ * To ensure fast and secure rule evaluation, the `Order` documents are self-contained.
+ * - Customer Details: The `Customer` entity (name, phone, address) is embedded directly
+ *   within each `/orders/{orderId}` document, removing the need for costly `get` calls to a
+ *   separate customer collection.
+ * - Ownership UID: Each `Order` document contains an `ownerUid` field, which stores the UID of
+ *   the anonymous user who created it. This allows for ownership verification without extra reads.
+ *
+ * Structural Segregation:
+ * - Admin Roles: Administrative roles are managed in a dedicated `/app_roles/admin_users`
+ *   collection. This structural separation allows for a simple and performant `exists()`
+ *   check to grant admins `list` access to the entire `/orders` collection without the need
+ *   for query-based filtering in the rules.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for reusable logic
+    /**
+     * @description Checks if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the authenticated user has an admin role.
+     * This is determined by the existence of their UID in the admin_users collection.
+     */
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/app_roles/admin_users/$(request.auth.uid));
+    }
+    
+    /**
+     * @description Verifies that a document being updated or deleted actually exists.
+     * This prevents errors and unintended side effects from operations on non-existent paths.
+     */
+    function isExistingDoc() {
+        return resource != null;
+    }
+    
+    /**
+     * @description Checks if the current user is the original owner of a specific order.
+     * Requires a 'get' call to the parent order document to read its 'ownerUid' field.
+     */
+    function isOrderOwner(orderId) {
+        return get(/databases/$(database)/documents/orders/$(orderId)).data.ownerUid == request.auth.uid;
+    }
+
+    /**
+     * @description Defines rules for the admin roles collection.
+     * @path /app_roles/admin_users/{adminId}
+     * @allow No client requests are allowed. This collection is managed by a trusted backend process.
+     * @deny Any client attempting to read or write to this collection.
+     * @principle Prevents privilege escalation by making roles non-discoverable and non-modifiable by clients.
+     */
+    match /app_roles/admin_users/{adminId} {
+      allow get: if false;
+      allow list: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Manages access to welding orders. Any authenticated user can create an
+     *   order, but only admins can read, update, or delete them.
+     * @path /orders/{orderId}
+     * @allow (create) An authenticated (anonymous or password) user creating a new order and setting themselves as the owner (`request.resource.data.ownerUid == request.auth.uid`).
+     * @allow (get, list, update, delete) An admin reading or modifying any order.
+     * @deny (get, list, update, delete) A non-admin user trying to read or modify any order, including their own after submission.
+     * @deny (create) A user trying to create an order on behalf of another user (`ownerUid != request.auth.uid`).
+     * @principle Segregates write access for new data submission from privileged read/update/delete access for data management.
+     */
+    match /orders/{orderId} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+
+    /**
+     * @description Secures photos within an order. Allows creation by the order owner
+     *   or an admin. Admins have full management access.
+     * @path /orders/{orderId}/photos/{photoId}
+     * @allow (create) The original order owner adding a photo, or an admin adding a photo to any order.
+     * @allow (get, list, update, delete) An admin managing photos for any order.
+     * @deny (get, list, update, delete) The original order owner trying to view or delete photos after submission.
+     * @deny (create) A user trying to add a photo to an order they do not own.
+     * @principle Subcollection access is derived from the parent document's state (ownership) or the user's role (admin).
+     */
+    match /orders/{orderId}/photos/{photoId} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if (isOrderOwner(orderId) || isAdmin()) && request.resource.data.orderId == orderId;
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+  }
+}
