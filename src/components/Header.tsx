@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -10,11 +9,12 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import ShareButton from './ShareButton';
 
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/order', label: 'Place Order' },
-  { href: '/contact', label: 'Contact Us' },
-  { href: '/admin/login', label: 'Admin Login' },
+const navItems = [
+  { type: 'link', href: '/', label: 'Home' },
+  { type: 'link', href: '/order', label: 'Place Order' },
+  { type: 'link', href: '/admin/login', label: 'Admin Login' },
+  { type: 'share', label: 'Share App' },
+  { type: 'link', href: '/contact', label: 'Contact Us' },
 ];
 
 export default function Header() {
@@ -23,14 +23,21 @@ export default function Header() {
 
   const NavLinks = () => (
     <>
-      {navLinks.map((link) => (
-        <Button asChild variant="ghost" onClick={() => setMenuOpen(false)} key={link.href}>
-          <Link href={link.href}>
-            {link.label}
-          </Link>
-        </Button>
-      ))}
-      <ShareButton variant="ghost" onClick={() => setMenuOpen(false)} />
+      {navItems.map((item) => {
+        if (item.type === 'link') {
+          return (
+            <Button asChild variant="ghost" onClick={() => setMenuOpen(false)} key={item.href}>
+              <Link href={item.href!}>
+                {item.label}
+              </Link>
+            </Button>
+          );
+        }
+        if (item.type === 'share') {
+          return <ShareButton variant="ghost" onClick={() => setMenuOpen(false)} key={item.label} />;
+        }
+        return null;
+      })}
     </>
   );
 
