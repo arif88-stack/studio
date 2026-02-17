@@ -34,7 +34,7 @@ export default function AdminOrdersPage() {
 
   const adminRoleRef = useMemoFirebase(() => {
     if (!firestore || !user) return null;
-    return doc(firestore, `app_roles/admin_users/${user.uid}`);
+    return doc(firestore, 'admin_users', user.uid);
   }, [firestore, user]);
 
   const { data: adminRole, isLoading: isLoadingAdminRole } = useDoc(adminRoleRef);

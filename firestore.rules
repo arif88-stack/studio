@@ -14,14 +14,14 @@
  * contains all necessary information, including denormalized customer details, to make it
  * self-contained for authorization. Photos related to an order are stored in a `/photos`
  * subcollection. Administrator privileges are defined by the existence of a user's UID
- * in the `/app_roles/admin_users` collection, which is managed by a trusted backend process.
+ * in the `/admin_users` collection, which is managed by a trusted backend process.
  *
  * Key Security Decisions:
  * - Anonymous Creation: Anonymous users are trusted to create new orders and associated photos.
  *   This is a "write-once" model; they cannot read, update, or delete their submissions.
  * - Admin-Only Management: All management tasks (reading, listing, updating, deleting orders
  *   and photos) are strictly reserved for users identified as administrators.
- * - No Client-Side Role Management: The `/app_roles` collection is completely locked down from
+ * - No Client-Side Role Management: The `/admin_users` collection is completely locked down from
  *   all client access to prevent any possibility of privilege escalation.
  * - Public Listing is Disallowed: Listing orders is a privileged operation reserved for admins.
  *
@@ -34,7 +34,7 @@
  *   the anonymous user who created it. This allows for ownership verification without extra reads.
  *
  * Structural Segregation:
- * - Admin Roles: Administrative roles are managed in a dedicated `/app_roles/admin_users`
+ * - Admin Roles: Administrative roles are managed in a dedicated `/admin_users`
  *   collection. This structural separation allows for a simple and performant `exists()`
  *   check to grant admins `list` access to the entire `/orders` collection without the need
  *   for query-based filtering in the rules.
@@ -56,7 +56,7 @@ service cloud.firestore {
      * This is determined by the existence of their UID in the admin_users collection.
      */
     function isAdmin() {
-      return exists(/databases/$(database)/documents/app_roles/admin_users/$(request.auth.uid));
+      return exists(/databases/$(database)/documents/admin_users/$(request.auth.uid));
     }
     
     /**
@@ -77,17 +77,13 @@ service cloud.firestore {
 
     /**
      * @description Defines rules for the admin roles collection.
-     * @path /app_roles/admin_users/{adminId}
+     * @path /admin_users/{adminId}
      * @allow No client requests are allowed. This collection is managed by a trusted backend process.
      * @deny Any client attempting to read or write to this collection.
      * @principle Prevents privilege escalation by making roles non-discoverable and non-modifiable by clients.
      */
-    match /app_roles/admin_users/{adminId} {
-      allow get: if false;
-      allow list: if false;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+    match /admin_users/{adminId} {
+      allow read, write: if false;
     }
 
     /**
