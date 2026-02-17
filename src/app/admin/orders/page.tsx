@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { collection, doc } from 'firebase/firestore';
 import { format } from 'date-fns';
 
-import { useFirebase, useUser, useCollection, updateDocumentNonBlocking, useMemoFirebase } from '@/firebase';
+import { useFirebase, useUser, useCollection, useDoc, updateDocumentNonBlocking, useMemoFirebase } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -32,18 +32,31 @@ export default function AdminOrdersPage() {
   const { firestore } = useFirebase();
   const { user, isUserLoading } = useUser();
 
+  const adminRoleRef = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
+    return doc(firestore, `app_roles/admin_users/${user.uid}`);
+  }, [firestore, user]);
+
+  const { data: adminRole, isLoading: isLoadingAdminRole } = useDoc(adminRoleRef);
+  const isUserAdmin = !!adminRole;
+
   const ordersCollection = useMemoFirebase(() => {
-    if (!firestore) return null;
+    if (!firestore || !isUserAdmin) return null;
     return collection(firestore, 'orders');
-  }, [firestore]);
+  }, [firestore, isUserAdmin]);
   
   const { data: orders, isLoading: isLoadingOrders } = useCollection<Order>(ordersCollection);
 
   useEffect(() => {
-    if (!isUserLoading && !user) {
-      router.replace('/admin/login');
+    const doneLoading = !isUserLoading && !isLoadingAdminRole;
+    if (doneLoading) {
+      if (!user) {
+        router.replace('/admin/login');
+      } else if (!isUserAdmin) {
+        router.replace('/'); 
+      }
     }
-  }, [user, isUserLoading, router]);
+  }, [user, isUserLoading, isUserAdmin, isLoadingAdminRole, router]);
 
   const handleRejectOrder = (orderId: string) => {
     if (!firestore) return;
@@ -64,7 +77,7 @@ export default function AdminOrdersPage() {
     }
   };
 
-  if (isUserLoading || !user) {
+  if (isUserLoading || isLoadingAdminRole || !isUserAdmin) {
     return <main className="flex items-center justify-center min-h-[calc(100vh-10rem)]"><p>Loading...</p></main>;
   }
 
