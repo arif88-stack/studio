@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -15,7 +16,7 @@ export default function Footer() {
       <footer className="bg-card border-t">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {year} Rajjab Welds. All rights reserved.
+            {year !== null ? `© ${year} Rajjab Welds. All rights reserved.` : `© Rajjab Welds. All rights reserved.`}
           </p>
         </div>
       </footer>
