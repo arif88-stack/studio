@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -11,6 +10,7 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
 const navLinks = [
   { href: '/', label: 'Home' },
+  { href: '/order', label: 'Place Order' },
   { href: '/contact', label: 'Contact Us' },
 ];
 
