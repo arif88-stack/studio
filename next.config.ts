@@ -1,29 +1,12 @@
-import type {NextConfig} from 'next';
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-    ],
-  },
-};
+/**
+ * @type {import('next').NextConfig}
+ *
+ * @description
+ * This file is intentionally left almost blank.
+ * The Next.js configuration has been moved to `next.config.mjs`
+ * to resolve a build issue where `.ts` config files were not supported
+ * in the deployment environment.
+ */
+const nextConfig = {};
 
 export default nextConfig;
