@@ -22,11 +22,11 @@ export default function Header() {
   const NavLinks = () => (
     <>
       {navLinks.map((link) => (
-        <Link href={link.href} key={link.href}>
-          <Button variant="ghost" onClick={() => setMenuOpen(false)}>
+        <Button asChild variant="ghost" onClick={() => setMenuOpen(false)} key={link.href}>
+          <Link href={link.href}>
             {link.label}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       ))}
     </>
   );
