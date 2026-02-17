@@ -13,13 +13,13 @@ export default function ShareButton(props: ButtonProps) {
 
   useEffect(() => {
     setIsClient(true);
-    if (navigator.share) {
+    if (typeof navigator.share !== 'undefined') {
       setCanShare(true);
     }
   }, []);
 
   const handleShare = async () => {
-    const appUrl = window.location.origin;
+    const appUrl = 'https://rajjabwelds.app';
     const shareData = {
       title: 'Rajjab Welds',
       text: 'Check out Rajjab Welds for custom welding services!',
