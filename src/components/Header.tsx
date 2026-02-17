@@ -13,9 +13,9 @@ import ShareButton from './ShareButton';
 const navItems = [
   { id: 'home', type: 'link', href: '/', label: 'Home' },
   { id: 'order', type: 'link', href: '/order', label: 'Place Order' },
+  { id: 'contact', type: 'link', href: '/contact', label: 'Contact Us' },
   { id: 'admin', type: 'link', href: '/admin/login', label: 'Admin Login' },
   { id: 'share', type: 'share', label: 'Share App' },
-  { id: 'contact', type: 'link', href: '/contact', label: 'Contact Us' },
 ];
 
 export default function Header() {
