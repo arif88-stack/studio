@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -58,9 +59,18 @@ export default function ShareButton(props: ButtonProps) {
     }
   };
 
+  if (!isMounted) {
+    return (
+        <Button {...props} disabled>
+            <Copy />
+            Share App
+        </Button>
+    );
+  }
+
   return (
-    <Button {...props} onClick={handleClick} disabled={!isMounted}>
-      {isMounted && canShare ? <Share2 /> : <Copy />}
+    <Button {...props} onClick={handleClick}>
+      {canShare ? <Share2 /> : <Copy />}
       Share App
     </Button>
   );
