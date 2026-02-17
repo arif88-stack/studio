@@ -14,7 +14,7 @@
           "type": "string",
           "description": "Full name of the customer placing the order."
         },
-        "phoneNumber": {
+        "phone": {
           "type": "string",
           "description": "Customer's contact phone number."
         },
@@ -26,7 +26,7 @@
       "required": [
         "id",
         "name",
-        "phoneNumber",
+        "phone",
         "address"
       ]
     },
@@ -75,6 +75,22 @@
           "items": {
             "type": "string"
           }
+        },
+        "name": {
+          "type": "string",
+          "description": "Denormalized full name of the customer."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Denormalized contact phone number of the customer."
+        },
+        "address": {
+          "type": "string",
+          "description": "Denormalized full physical address of the customer."
+        },
+        "ownerUid": {
+          "type": "string",
+          "description": "The UID of the authenticated user (anonymous or otherwise) who created the order."
         }
       },
       "required": [
@@ -86,7 +102,11 @@
         "height",
         "submissionDateTime",
         "status",
-        "photoIds"
+        "photoIds",
+        "name",
+        "phone",
+        "address",
+        "ownerUid"
       ]
     },
     "Photo": {
@@ -188,6 +208,6 @@
         }
       }
     ],
-    "reasoning": "The Firestore data structure is designed to be secure, scalable, and debuggable by strictly adhering to the core design principles and mandates. Central to this design is the use of anonymous authentication for customers placing orders and role-based access control for shop administrators.\n\n**Authorization Independence via Denormalization:**\n1.  **Customer Data Embedding:** The `Customer` entity's critical fields (name, phoneNumber, address) are directly embedded into the `Order` document itself. This eliminates the need for `get()` operations in security rules to retrieve customer details when validating or accessing an order. Consequently, `Order` documents are self-contained, simplifying atomic operations (transactions/batches) and making authorization logic straightforward as all necessary customer information is present within the document.\n2.  **`ownerUid` in `Order`:** Each `Order` document includes an `ownerUid` field, which explicitly stores the `request.auth.uid` of the anonymous user who placed the order. This denormalized ownership information directly within the document ensures that any access decision related to the original placer can be made without additional lookups.\n3.  **`orderId` in `Photo`:** The `Photo` documents, stored in a subcollection under `Order`, also include an explicit `orderId` field. While the path already provides this context, its presence in the document reinforces authorization independence, allowing for direct validation if a photo were ever moved or referenced outside its immediate hierarchical context, and simplifying security rules by ensuring all necessary context is within the `resource.data` object.\n\n**QAPs (Rules are not Filters) and Structural Segregation:**\n1.  **Dedicated Admin Role Collection:** Administrative users (shop personnel) are identified through a dedicated top-level collection: `/admin_users/{adminId}`. This collection uses the 'existence over content' pattern, where a document for a `uid` simply existing signifies an admin role. This segregation ensures that the `list` operation on the `/orders` collection can be securely performed by administrators without filtering. Security rules can efficiently check `exists(/databases/$(database)/documents/admin_users/$(request.auth.uid))` allowing authorized users to retrieve all orders without requiring client-side filtering or inefficient rule evaluation across all documents.\n2.  **Homogeneous Security Posture:**\n    *   The `/orders` collection maintains a consistent security posture: any authenticated anonymous user can `create` an order (with their `ownerUid`), and only authenticated `admin` users can `read`, `update`, or `delete` orders. This clear distinction simplifies rules and ensures `list` operations for admins return only authorized data.\n    *   Similarly, the `/orders/{orderId}/photos` subcollection's security is tied to its parent order, ensuring a consistent access pattern for photo creation (tied to order placement or admin actions) and admin-only read/update/delete access. This structural segregation supports efficient and secure `list` queries for photos within a specific order by an authorized administrator.\n\nThis design prioritizes clarity, security, and performance by embedding crucial authorization context, leveraging hierarchical paths for related data, and segregating different security postures into distinct collections or subcollections."
+    "reasoning": "The Firestore data structure is designed to be secure, scalable, and debuggable by strictly adhering to the core design principles and mandates. Central to this design is the use of anonymous authentication for customers placing orders and role-based access control for shop administrators.\n\n**Authorization Independence via Denormalization:**\n1.  **Customer Data Embedding:** The `Customer` entity's critical fields (name, phone, address) are directly embedded into the `Order` document itself. This eliminates the need for `get()` operations in security rules to retrieve customer details when validating or accessing an order. Consequently, `Order` documents are self-contained, simplifying atomic operations (transactions/batches) and making authorization logic straightforward as all necessary customer information is present within the document.\n2.  **`ownerUid` in `Order`:** Each `Order` document includes an `ownerUid` field, which explicitly stores the `request.auth.uid` of the anonymous user who placed the order. This denormalized ownership information directly within the document ensures that any access decision related to the original placer can be made without additional lookups.\n3.  **`orderId` in `Photo`:** The `Photo` documents, stored in a subcollection under `Order`, also include an explicit `orderId` field. While the path already provides this context, its presence in the document reinforces authorization independence, allowing for direct validation if a photo were ever moved or referenced outside its immediate hierarchical context, and simplifying security rules by ensuring all necessary context is within the `resource.data` object.\n\n**QAPs (Rules are not Filters) and Structural Segregation:**\n1.  **Dedicated Admin Role Collection:** Administrative users (shop personnel) are identified through a dedicated top-level collection: `/admin_users/{adminId}`. This collection uses the 'existence over content' pattern, where a document for a `uid` simply existing signifies an admin role. This segregation ensures that the `list` operation on the `/orders` collection can be securely performed by administrators without filtering. Security rules can efficiently check `exists(/databases/$(database)/documents/admin_users/$(request.auth.uid))` allowing authorized users to retrieve all orders without requiring client-side filtering or inefficient rule evaluation across all documents.\n2.  **Homogeneous Security Posture:**\n    *   The `/orders` collection maintains a consistent security posture: any authenticated anonymous user can `create` an order (with their `ownerUid`), and only authenticated `admin` users can `read`, `update`, or `delete` orders. This clear distinction simplifies rules and ensures `list` operations for admins return only authorized data.\n    *   Similarly, the `/orders/{orderId}/photos` subcollection's security is tied to its parent order, ensuring a consistent access pattern for photo creation (tied to order placement or admin actions) and admin-only read/update/delete access. This structural segregation supports efficient and secure `list` queries for photos within a specific order by an authorized administrator.\n\nThis design prioritizes clarity, security, and performance by embedding crucial authorization context, leveraging hierarchical paths for related data, and segregating different security postures into distinct collections or subcollections."
   }
 }

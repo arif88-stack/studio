@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 export default function Footer() {
     const [year, setYear] = useState(new Date().getFullYear());
 
     useEffect(() => {
+        // This ensures the year is only set on the client-side after hydration,
+        // preventing a mismatch with the server-rendered value.
         setYear(new Date().getFullYear());
     }, []);
 
