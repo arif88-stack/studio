@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -8,24 +7,24 @@ import { useToast } from '@/hooks/use-toast';
 
 export default function ShareButton(props: ButtonProps) {
   const { toast } = useToast();
-  const [appUrl, setAppUrl] = useState('');
   const [canShare, setCanShare] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // This effect will run only on the client, after hydration
   useEffect(() => {
-    setAppUrl(window.location.origin);
+    setIsMounted(true);
     if (navigator.share) {
       setCanShare(true);
     }
   }, []);
 
-  const shareData = {
-    title: 'Rajjab Welds',
-    text: 'Check out Rajjab Welds for custom welding services!',
-    url: appUrl,
-  };
-
   const handleShare = async () => {
+    const appUrl = window.location.origin;
+    const shareData = {
+      title: 'Rajjab Welds',
+      text: 'Check out Rajjab Welds for custom welding services!',
+      url: appUrl,
+    };
+
     if (canShare) {
       try {
         await navigator.share(shareData);
@@ -36,32 +35,22 @@ export default function ShareButton(props: ButtonProps) {
       }
     } else {
       // Fallback for browsers that don't support the Web Share API
-      copyToClipboard();
+      navigator.clipboard.writeText(appUrl).then(() => {
+        toast({
+          title: "Link Copied!",
+          description: "The app link has been copied to your clipboard.",
+        });
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+        toast({
+          variant: "destructive",
+          title: "Copy Failed",
+          description: "Could not copy the link to your clipboard.",
+        });
+      });
     }
   };
 
-  const copyToClipboard = () => {
-    if (!appUrl) return;
-    navigator.clipboard.writeText(appUrl).then(() => {
-      toast({
-        title: "Link Copied!",
-        description: "The app link has been copied to your clipboard.",
-      });
-    }).catch(err => {
-      console.error('Failed to copy:', err);
-      toast({
-        variant: "destructive",
-        title: "Copy Failed",
-        description: "Could not copy the link to your clipboard.",
-      });
-    });
-  };
-
-  if (!appUrl) {
-    // Don't render the button on the server or before the client has mounted
-    return null;
-  }
-  
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     handleShare();
     if (props.onClick) {
@@ -70,8 +59,8 @@ export default function ShareButton(props: ButtonProps) {
   };
 
   return (
-    <Button {...props} onClick={handleClick}>
-      {canShare ? <Share2 /> : <Copy />}
+    <Button {...props} onClick={handleClick} disabled={!isMounted}>
+      {isMounted && canShare ? <Share2 /> : <Copy />}
       Share App
     </Button>
   );
