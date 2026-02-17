@@ -9,8 +9,8 @@ import Footer from '@/components/Footer';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'WeldOrder - Your Online Welding Shop',
-  description: 'Place welding orders online for gates, grills, railings, and more.',
+  title: 'Rajjab Welds - Custom Welding Services',
+  description: 'Your trusted partner for custom welding jobs: gates, grills, railings, and more.',
 };
 
 export default function RootLayout({

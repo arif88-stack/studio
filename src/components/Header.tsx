@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
@@ -11,7 +11,6 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/order', label: 'Place Order' },
   { href: '/contact', label: 'Contact Us' },
 ];
 
@@ -37,7 +36,7 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2">
             <Logo className="w-8 h-8 text-primary" />
-            <span className="text-xl font-bold font-headline">WeldOrder</span>
+            <span className="text-xl font-bold font-headline">Rajjab Welds</span>
           </Link>
 
           {isMobile ? (
