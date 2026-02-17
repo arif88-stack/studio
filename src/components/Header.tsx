@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import Logo from '@/components/Logo';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 
@@ -43,7 +42,6 @@ export default function Header() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2">
-            <Logo className="w-8 h-8 text-primary" />
             <span className="text-xl font-bold font-headline">Rajjab Welds</span>
           </Link>
 
