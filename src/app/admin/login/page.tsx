@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useUser } from '@/firebase/provider';
+import { Label } from '@/components/ui/label';
 
 
 const LoginSchema = z.object({
@@ -117,20 +118,19 @@ export default function AdminLoginPage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handlePinSubmit} className="space-y-6">
-                <FormItem>
-                  <FormLabel>PIN</FormLabel>
-                  <FormControl>
-                    <Input
-                        type="password"
-                        placeholder="********"
-                        value={pin}
-                        onChange={(e) => setPin(e.target.value)}
-                        maxLength={8}
-                        autoComplete="off"
-                    />
-                  </FormControl>
-                  {pinError && <FormMessage>{pinError}</FormMessage>}
-                </FormItem>
+                <div className="space-y-2">
+                  <Label htmlFor="pin">PIN</Label>
+                  <Input
+                      id="pin"
+                      type="password"
+                      placeholder="********"
+                      value={pin}
+                      onChange={(e) => setPin(e.target.value)}
+                      maxLength={8}
+                      autoComplete="off"
+                  />
+                  {pinError && <p className="text-sm font-medium text-destructive">{pinError}</p>}
+                </div>
                 <Button type="submit" className="w-full">
                   Verify PIN
                 </Button>
