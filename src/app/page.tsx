@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Logo from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import ShareButton from '@/components/ShareButton';
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
               Place an Order
             </Button>
           </Link>
+          <ShareButton />
         </CardContent>
       </Card>
     </main>
