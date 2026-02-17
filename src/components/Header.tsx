@@ -22,9 +22,9 @@ const navItems = [
   { id: 'home', type: 'link', href: '/', label: 'Home' },
   { id: 'order', type: 'link', href: '/order', label: 'Place Order' },
   { id: 'contact', type: 'link', href: '/contact', label: 'Contact Us' },
+  { id: 'install', type: 'install', label: 'Install App' },
   { id: 'admin', type: 'link', href: '/admin/login', label: 'Admin Login' },
   { id: 'share', type: 'share', label: 'Share App' },
-  { id: 'install', type: 'install', label: 'Install App' },
 ];
 
 export default function Header() {
@@ -32,9 +32,11 @@ export default function Header() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isInstallDialogOpen, setInstallDialogOpen] = useState(false);
+  const [appUrl, setAppUrl] = useState('');
 
   useEffect(() => {
     setIsMounted(true);
+    setAppUrl(window.location.origin);
   }, []);
 
   const NavLinks = () => (
@@ -109,7 +111,22 @@ export default function Header() {
           <DialogHeader>
             <DialogTitle>Install Rajjab Welds App</DialogTitle>
             <DialogDescription>
-              For quick access, add this web application to your home screen. No download from an app store is required.
+              For quick access, add this web application to your home screen. No
+              download from an app store is required.
+              {isMounted && appUrl && (
+                <>
+                  <br />
+                  Navigate to:{' '}
+                  <a
+                    href={appUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline"
+                  >
+                    {appUrl}
+                  </a>
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">

@@ -19,7 +19,7 @@ export default function ShareButton(props: ButtonProps) {
   }, []);
 
   const handleShare = async () => {
-    const appUrl = 'https://rajjabwelds.app';
+    const appUrl = window.location.origin;
     const shareData = {
       title: 'Rajjab Welds',
       text: 'Check out Rajjab Welds for custom welding services!',
@@ -39,7 +39,7 @@ export default function ShareButton(props: ButtonProps) {
       navigator.clipboard.writeText(appUrl).then(() => {
         toast({
           title: "Link Copied!",
-          description: "The app link has been copied to your clipboard.",
+          description: `The app link (${appUrl}) has been copied to your clipboard.`,
         });
       }).catch(err => {
         console.error('Failed to copy:', err);
