@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 export const metadata: Metadata = {
   title: 'Rajjab Welds - Custom Welding Services',
   description: 'Your trusted partner for custom welding jobs: gates, grills, railings, and more.',
+  keywords: ['welding', 'custom welding', 'metal work', 'gates', 'grills', 'railings', 'Rajjab Welds', 'shutter repair', 'metal fabrication'],
 };
 
 export default function RootLayout({
