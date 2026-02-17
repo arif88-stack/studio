@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button, type ButtonProps } from '@/components/ui/button';
-import { Share2, Copy } from 'lucide-react';
+import { Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function ShareButton(props: ButtonProps) {
@@ -61,7 +61,7 @@ export default function ShareButton(props: ButtonProps) {
 
   return (
     <Button {...props} onClick={handleClick} disabled={!isClient}>
-      {canShare ? <Share2 /> : <Copy />}
+      <Share2 />
       Share App
     </Button>
   );
