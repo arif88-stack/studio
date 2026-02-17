@@ -20,9 +20,9 @@
     },
     {
       "id": "gallery-welding",
-      "description": "A close-up of a welder's mask, representing the Rajjab Welds logo.",
-      "imageUrl": "https://images.unsplash.com/photo-1533013239385-c40590a16b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3ZWxkaW5nJTIwbWFza3xlbnwwfHx8fDE3MDk4MTE4MzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "welder mask"
+      "description": "A close-up of a welder at work, representing the Rajjab Welds logo.",
+      "imageUrl": "https://images.unsplash.com/photo-1612181340993-d207c83403d9?q=80&w=1080&auto=format&fit=crop",
+      "imageHint": "welder working"
     }
   ]
 }
