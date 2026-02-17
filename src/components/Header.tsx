@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import Logo from './Logo';
 
 // Simplified navigation
 const navItems = [
@@ -41,7 +42,8 @@ export default function Header() {
     <header className="bg-card border-b sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-3">
+            <Logo className="h-8 w-8" />
             <span className="text-xl font-bold font-headline">Rajjab Welds</span>
           </Link>
 

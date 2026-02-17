@@ -1,13 +1,15 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Logo from '@/components/Logo';
 
 export default function Home() {
   return (
     <main className="flex items-center justify-center min-h-[calc(100vh-10rem)] p-4 animate-fade-in">
       <Card className="w-full max-w-md text-center shadow-2xl">
         <CardHeader className="items-center">
-          <CardTitle className="text-4xl font-extrabold tracking-tight font-headline pt-8">
+          <Logo className="w-24 h-24 mb-4" />
+          <CardTitle className="text-4xl font-extrabold tracking-tight font-headline">
             Welcome to Rajjab Welds
           </CardTitle>
           <CardDescription className="text-lg text-muted-foreground pt-2">
