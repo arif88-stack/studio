@@ -8,11 +8,11 @@ import { useToast } from '@/hooks/use-toast';
 
 export default function ShareButton(props: ButtonProps) {
   const { toast } = useToast();
+  const [isClient, setIsClient] = useState(false);
   const [canShare, setCanShare] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    setIsClient(true);
     if (navigator.share) {
       setCanShare(true);
     }
@@ -59,17 +59,8 @@ export default function ShareButton(props: ButtonProps) {
     }
   };
 
-  if (!isMounted) {
-    return (
-        <Button {...props} disabled>
-            <Copy />
-            Share App
-        </Button>
-    );
-  }
-
   return (
-    <Button {...props} onClick={handleClick}>
+    <Button {...props} onClick={handleClick} disabled={!isClient}>
       {canShare ? <Share2 /> : <Copy />}
       Share App
     </Button>
