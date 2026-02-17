@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import ShareButton from './ShareButton';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -30,6 +31,7 @@ export default function Header() {
           </Link>
         </Button>
       ))}
+      <ShareButton variant="ghost" onClick={() => setMenuOpen(false)} />
     </>
   );
 

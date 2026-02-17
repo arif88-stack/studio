@@ -2,11 +2,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button, type ButtonProps } from '@/components/ui/button';
 import { Share2, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-export default function ShareButton() {
+export default function ShareButton(props: ButtonProps) {
   const { toast } = useToast();
   const [appUrl, setAppUrl] = useState('');
   const [canShare, setCanShare] = useState(false);
@@ -61,15 +61,17 @@ export default function ShareButton() {
     // Don't render the button on the server or before the client has mounted
     return null;
   }
+  
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    handleShare();
+    if (props.onClick) {
+      props.onClick(e);
+    }
+  };
 
   return (
-    <Button
-      variant="outline"
-      size="lg"
-      className="w-full mt-4"
-      onClick={handleShare}
-    >
-      {canShare ? <Share2 className="mr-2" /> : <Copy className="mr-2" />}
+    <Button {...props} onClick={handleClick}>
+      {canShare ? <Share2 /> : <Copy />}
       Share App
     </Button>
   );

@@ -27,7 +27,6 @@ export default function Home() {
               Place an Order
             </Button>
           </Link>
-          <ShareButton />
         </CardContent>
       </Card>
     </main>
