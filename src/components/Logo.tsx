@@ -1,31 +1,24 @@
-
+import Image from 'next/image';
 import { cn } from "@/lib/utils";
-import type { SVGProps } from "react";
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import type { HTMLAttributes } from 'react';
 
-export default function Logo(props: SVGProps<SVGSVGElement>) {
+const weldingImage = PlaceHolderImages.find(img => img.id === 'gallery-welding');
+// Using a high-quality image of a welder already present in the project's image list.
+const logoUrl = weldingImage?.imageUrl ?? "https://images.unsplash.com/photo-1533013239385-c40590a16b48?w=500";
+
+/**
+ * Renders a circular, responsive logo using a photographic image of a welder.
+ */
+export default function Logo(props: HTMLAttributes<HTMLDivElement>) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={cn(props.className)}
-      aria-label="Rajjab Welds Logo"
-      {...props}
-    >
-      <path d="M12 3L8 7V13H6V17H18V13H16V7L12 3Z" fill="hsl(var(--primary))" fillOpacity="0.2" />
-      <path d="M8 7L12 11L16 7" />
-      <path d="M12 11V17" />
-      <path d="M7 15H17" />
-      <path d="M12 3v-2" />
-      <path d="m5 5-1-1" />
-      <path d="m19 5 1-1" />
-      <path d="M12 21v2" />
-      <path d="m5 19 1 1" />
-      <path d="m19 19-1 1" />
-    </svg>
+    <div {...props} className={cn("relative aspect-square overflow-hidden rounded-full", props.className)}>
+        <Image
+          src={logoUrl}
+          alt="Rajjab Welds Logo showing a person welding"
+          fill
+          className="object-cover"
+        />
+    </div>
   );
 }
