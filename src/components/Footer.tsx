@@ -16,9 +16,6 @@ export default function Footer() {
           <p className="text-sm text-muted-foreground">
             © {year} Rajjab Welds. All rights reserved.
           </p>
-          <Link href="/admin/login" className="text-sm text-muted-foreground hover:text-primary">
-            Admin Login
-          </Link>
         </div>
       </footer>
     );
