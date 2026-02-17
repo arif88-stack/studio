@@ -12,9 +12,9 @@ export default function Logo(props: SVGProps<SVGSVGElement>) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={cn(props.className)}
+      aria-label="Rajjab Welds Logo"
       {...props}
     >
-      <title>Rajjab Welds Logo</title>
       <path d="M12 3L8 7V13H6V17H18V13H16V7L12 3Z" fill="hsl(var(--primary))" fillOpacity="0.2" />
       <path d="M8 7L12 11L16 7" />
       <path d="M12 11V17" />
