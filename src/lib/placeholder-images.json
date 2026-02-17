@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "gallery-gate",
+      "description": "A beautifully crafted metal gate.",
+      "imageUrl": "https://images.unsplash.com/photo-1606705667685-9b97d2771b86?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtZXRhbCUyMGdhdGV8ZW58MHx8fHwxNzcxMjM0MTY2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "metal gate"
+    },
+    {
+      "id": "gallery-grill",
+      "description": "An intricate window grill design.",
+      "imageUrl": "https://images.unsplash.com/photo-1674317122204-c2e1281f5a86?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2luZG93JTIwZ3JpbGx8ZW58MHx8fHwxNzcxMzI0OTc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "window grill"
+    },
+    {
+      "id": "gallery-railing",
+      "description": "A sturdy and elegant metal railing.",
+      "imageUrl": "https://images.unsplash.com/photo-1770009971135-a65323791848?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWV0YWwlMjByYWlsaW5nfGVufDB8fHx8MTc3MTMyNDk3OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "metal railing"
+    },
+    {
+      "id": "gallery-shutter",
+      "description": "A repaired metal shutter.",
+      "imageUrl": "https://images.unsplash.com/photo-1760544139172-3f9185e5cb2a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtZXRhbCUyMHNodXR0ZXJ8ZW58MHx8fHwxNzcxMzI0OTc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "metal shutter"
+    },
+    {
+      "id": "gallery-custom",
+      "description": "Custom metal fabrication work.",
+      "imageUrl": "https://images.unsplash.com/photo-1496244665455-9eed4d2c97dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWV0YWwlMjBmYWJyaWNhdGlvbnxlbnwwfHx8fDE3NzEzMjQ5Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "metal fabrication"
+    },
+    {
+      "id": "gallery-welding",
+      "description": "A close-up of a welding job.",
+      "imageUrl": "https://images.unsplash.com/photo-1598302936664-407d6c250e2c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3ZWxkaW5nJTIwYXJjfGVufDB8fHx8MTc3MTMyNDk3OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "welding arc"
+    }
+  ]
 }
