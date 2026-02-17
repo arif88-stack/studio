@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Phone, Mail } from "lucide-react";
@@ -6,7 +7,7 @@ import WhatsappIcon from "@/components/icons/WhatsappIcon";
 
 export default function ContactPage() {
   const phoneNumber = "+919678457111";
-  const whatsappNumber = "919678457111";
+  const whatsappNumber = "9678457111";
   const email = "rajjabalihh86@gmail.com";
 
   return (
